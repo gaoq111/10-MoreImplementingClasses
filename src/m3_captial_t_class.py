@@ -19,10 +19,10 @@ def main():
     print('Un-comment the calls in MAIN one by one')
     print(' to run the testing code as you complete the TODOs.')
 
-    # run_test_simple_t()
-    # run_test_set_colors()
-    # run_test_move_by()
-    # run_test_clone()
+    run_test_simple_t()
+    run_test_set_colors()
+    run_test_move_by()
+    run_test_clone()
 
 
 def run_test_simple_t():
@@ -74,6 +74,7 @@ def run_test_move_by():
     little_red_t.attach_to(window)
     window.render(0.5)
     little_red_t.move_by(0, 100)
+    little_red_t.attach_to(window)
     window.render(0.5)
     little_red_t.move_by(0, 100)
     window.render(0.5)
@@ -146,12 +147,13 @@ class CapitalT(object):
           :type letter_thickness:   int
         """
         # --------------------------------------------------------------
-        # TODO: 3.
+        # DONE: 3.
         #   READ the above specification, including the Example.
         #   Implement this method
         #   Note: you will need to also implement attach_to before testing
         # --------------------------------------------------------------
-        self.h_rect = rg.Rectangle(rg.Point(intersection_center.x-width,intersection_center.y-letter_thickness),rg.Point())
+        self.h_rect = rg.Rectangle(rg.Point(intersection_center.x-width/2,intersection_center.y-letter_thickness/2),rg.Point(intersection_center.x + width/2,intersection_center.y+letter_thickness/2))
+        self.v_rect = rg.Rectangle(rg.Point(intersection_center.x-letter_thickness/2,intersection_center.y-letter_thickness/2),rg.Point(intersection_center.x+letter_thickness/2,intersection_center.y-letter_thickness/2+height))
     def attach_to(self, window):
         """
         What comes in:
@@ -171,12 +173,13 @@ class CapitalT(object):
           :type window: rg.RoseWindow
         """
         # --------------------------------------------------------------
-        # TODO: 4.
+        # DONE: 4.
         #   READ the above specification, including the Example.
         #   Implement and test this method by looking at the console and
         #     the graphics window (compare it to simple_t.pdf)
         # --------------------------------------------------------------
-
+        self.v_rect.attach_to(window)
+        self.h_rect.attach_to(window)
     def set_colors(self, fill_color, outline_color):
         """
         What comes in:
@@ -198,13 +201,16 @@ class CapitalT(object):
           :type outline_color: str
         """
         # --------------------------------------------------------------
-        # TODO: 5.
+        # DONE: 5.
         #   READ the above specification, including the Example.
         #   Implement and test this method by uncommenting the appropriate
         #     run_test method in main. Compare the graphics window to
         #     set_colors.pdf.
         # --------------------------------------------------------------
-
+        self.h_rect.fill_color = fill_color
+        self.v_rect.fill_color = fill_color
+        self.h_rect.outline_color = outline_color
+        self.v_rect.outline_color = outline_color
     def move_by(self, dx, dy):
         """
         What comes in:
@@ -228,14 +234,29 @@ class CapitalT(object):
           :type dy: int
         """
         # --------------------------------------------------------------
-        # TODO: 6.
+        # DONE: 6.
         #   READ the above specification, including the Example.
         #   Implement and test this method by uncommenting the appropriate
         #     run_test method in main. Compare the graphics window to
         #     move_by.pdf. Note: the pdf shows the different locations
         #     that the T moves through, but there is only 1 T at any moment.
         # --------------------------------------------------------------
-
+        self.a = self.v_rect.get_upper_left_corner().x
+        self.b = self.v_rect.get_upper_left_corner().y
+        self.c = self.v_rect.get_lower_right_corner().x
+        self.d = self.v_rect.get_lower_right_corner().y
+        self.e = self.h_rect.get_upper_left_corner().x
+        self.f = self.h_rect.get_upper_left_corner().y
+        self.g = self.h_rect.get_lower_right_corner().x
+        self.h = self.h_rect.get_lower_right_corner().y
+        self.v_rect.corner_1.x = self.a + (dx)
+        self.v_rect.corner_1.y = self.b + (dy)
+        self.v_rect.corner_2.x = self.c + (dx)
+        self.v_rect.corner_2.y = self.d + (dy)
+        self.h_rect.corner_1.x = self.e + (dx)
+        self.h_rect.corner_1.y = self.f + (dy)
+        self.h_rect.corner_2.x = self.g + (dx)
+        self.h_rect.corner_2.y = self.h + (dy)
     def clone(self):
         """
         What comes in:
@@ -256,13 +277,25 @@ class CapitalT(object):
           :rtype: CapitalT
         """
         # --------------------------------------------------------------
-        # TODO: 7.
+        # DONE: 7.
         #   READ the above specification, including the Example.
         #   Implement and test this method by uncommenting the appropriate
         #     run_test method in main. Compare the graphics window to
         #     clone.pdf.
         # --------------------------------------------------------------
-
+        self.i = self.h_rect.get_upper_left_corner()
+        self.j = self.h_rect.get_lower_right_corner()
+        self.k = self.v_rect.get_upper_left_corner()
+        self.l = self.v_rect.get_lower_right_corner()
+        self.rectangle1 = rg.Rectangle(self.i,self.j)
+        self.rectangle2 = rg.Rectangle(self.k,self.l)
+        self.rectangle1.fill_color = self.h_rect.fill_color
+        self.rectangle1.outline_color = self.h_rect.outline_color
+        self.rectangle2.fill_color = self.h_rect.fill_color
+        self.rectangle2.outline_color = self.h_rect.outline_color
+        self.m = CapitalT(rg.Point((self.i.x+self.j.x)/2,(self.i.y+self.j.y)/2),self.j.x-self.i.x, self.l.y-self.k.y,self.j.y-self.i.y)
+        self.m.set_colors(self.h_rect .fill_color,self.h_rect.outline_color)
+        return self.m
 
 # ----------------------------------------------------------------------
 # If this module is running at the top level (as opposed to being
